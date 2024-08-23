@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Alert } from 'react-native';
+import { View, Button, Image, Alert, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import { Platform } from 'react-native';
 
 const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
@@ -18,6 +17,26 @@ const ImageUpload = () => {
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true, 
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const takePhoto = async () => {
+    let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Alert.alert('Permission to access camera is required!');
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -63,11 +82,21 @@ const ImageUpload = () => {
         };
         reader.readAsDataURL(blob);
       } else {
-        // For mobile, use expo-file-system to convert to base64
-        const base64 = await FileSystem.readAsStringAsync(imageUri, {
+        // For mobile, ensure the URI is accessible
+        const fileInfo = await FileSystem.getInfoAsync(imageUri);
+        if (!fileInfo.exists) {
+          Alert.alert('File not found!');
+          return;
+        }
+
+        // Convert the image to base64
+        base64 = await FileSystem.readAsStringAsync(imageUri, {
           encoding: FileSystem.EncodingType.Base64,
         });
 
+        console.log("ok")
+
+        // Upload the base64 image
         const response = await fetch('http://127.0.0.1:8000/classify/', {
           method: 'POST',
           headers: {
@@ -90,6 +119,7 @@ const ImageUpload = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Button title="Select Image" onPress={selectImage} />
+      {Platform.OS !== 'web' && <Button title="Take Photo" onPress={takePhoto} />}
       {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginTop: 20 }} />}
       <Button title="Upload Image" onPress={uploadImage} />
     </View>
