@@ -66,7 +66,7 @@ const ImageUpload = () => {
           base64 = reader.result?.toString().split(',')[1] || '';
 
           // Send the base64 string to the server
-          const serverResponse = await fetch('http://127.0.0.1:8000/classify/', {
+          const serverResponse = await fetch('https://ba78-24-54-11-154.ngrok-free.app/classify/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -94,10 +94,8 @@ const ImageUpload = () => {
           encoding: FileSystem.EncodingType.Base64,
         });
 
-        console.log("ok")
-
         // Upload the base64 image
-        const response = await fetch('http://127.0.0.1:8000/classify/', {
+        const response = await fetch('https://ba78-24-54-11-154.ngrok-free.app/classify/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -106,7 +104,6 @@ const ImageUpload = () => {
             image_uri: base64,
           }),
         });
-
         const data = await response.json();
         setResult(data);
         console.log("species: " + data.species);
