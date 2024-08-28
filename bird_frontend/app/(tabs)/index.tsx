@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Alert, Platform } from 'react-native';
+import { View, Button, Image, Alert, Platform, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import tw from 'twrnc';
+import { useFonts } from 'expo-font';
 
 const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
   const [result, setResult] = useState<string>("");
+
+  const [fontsLoaded] = useFonts({
+    'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
+  });
 
   const selectImage = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -120,6 +125,7 @@ const ImageUpload = () => {
       {Platform.OS !== 'web' && <Button title="Take Photo" onPress={takePhoto} />}
       {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginTop: 20 }} />}
       <Button title="Upload Image" onPress={uploadImage} />
+      <Text style={{ fontFamily: 'MaterialSymbolsRounded', fontSize: 24, color: 'red' }}>favorite</Text>
     </View>
   );
 };
