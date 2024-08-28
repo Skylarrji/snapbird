@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Button, Image, Alert, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import tw from 'twrnc';
 
 const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
@@ -114,7 +115,7 @@ const ImageUpload = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={tw`flex-1 items-center justify-center bg-gray-100`}>
       <Button title="Select Image" onPress={selectImage} />
       {Platform.OS !== 'web' && <Button title="Take Photo" onPress={takePhoto} />}
       {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginTop: 20 }} />}
