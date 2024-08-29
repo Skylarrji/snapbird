@@ -3,10 +3,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Image, Text, View } from 'react-native';
 import { Link, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
-
+import tw from 'twrnc';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useFonts } from 'expo-font';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -17,6 +18,14 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [fontsLoaded] = useFonts({
+    'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    // Return a loading component if fonts aren't loaded yet
+    return null; // or you can return a loading spinner, etc.
+  }
 
   return (
     <Tabs
@@ -27,17 +36,16 @@ export default function TabLayout() {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {/* Logo */}
             <Image
-              source={require('@/assets/images/bird_logo.png')}  // Replace with your logo path
+              source={require('@/assets/images/bird_logo.png')}
               style={{ width: 30, height: 30, marginRight: 10 }}
               resizeMode="contain"
             />
             {/* Title */}
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-              My Fixed Header Title
-            </Text>
+            <Text style={tw`text-lg font-semibold`}>SnapBird</Text>
           </View>
         ),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -47,12 +55,16 @@ export default function TabLayout() {
             <Link href="/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
+                  <Text
+                    style={{
+                      marginRight: 15,
+                      fontFamily: 'MaterialSymbolsRounded',
+                      fontSize: 28,
+                      color: Colors[colorScheme ?? 'light'].text,
+                    }}
+                  >
+                    info
+                  </Text>
                 )}
               </Pressable>
             </Link>

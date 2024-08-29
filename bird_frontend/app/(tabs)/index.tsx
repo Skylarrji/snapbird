@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Alert, Platform, Text } from 'react-native';
+import { View, Image, Alert, Platform, Text, Pressable, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import tw from 'twrnc';
 import { useFonts } from 'expo-font';
 
+// @ts-expect-error
+import defaultImage from '../../assets/images/bird_graphic.png';
+
 const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
-  const [result, setResult] = useState<string>("");
 
   const [fontsLoaded] = useFonts({
     'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
@@ -63,7 +65,6 @@ const ImageUpload = () => {
       let base64: string;
 
       if (Platform.OS === 'web') {
-        // For web, use FileReader to convert to base64
         const response = await fetch(imageUri);
         const blob = await response.blob();
         const reader = new FileReader();
@@ -71,7 +72,6 @@ const ImageUpload = () => {
         reader.onloadend = async () => {
           base64 = reader.result?.toString().split(',')[1] || '';
 
-          // Send the base64 string to the server
           const serverResponse = await fetch('https://ba78-24-54-11-154.ngrok-free.app/classify/', {
             method: 'POST',
             headers: {
@@ -83,24 +83,20 @@ const ImageUpload = () => {
           });
 
           const data = await serverResponse.json();
-          setResult(data);
           console.log("species: " + data.species);
         };
         reader.readAsDataURL(blob);
       } else {
-        // For mobile, ensure the URI is accessible
         const fileInfo = await FileSystem.getInfoAsync(imageUri);
         if (!fileInfo.exists) {
           Alert.alert('File not found!');
           return;
         }
 
-        // Convert the image to base64
         base64 = await FileSystem.readAsStringAsync(imageUri, {
           encoding: FileSystem.EncodingType.Base64,
         });
 
-        // Upload the base64 image
         const response = await fetch('https://ba78-24-54-11-154.ngrok-free.app/classify/', {
           method: 'POST',
           headers: {
@@ -111,7 +107,6 @@ const ImageUpload = () => {
           }),
         });
         const data = await response.json();
-        setResult(data);
         console.log("species: " + data.species);
       }
     } catch (error) {
@@ -120,12 +115,39 @@ const ImageUpload = () => {
   };
 
   return (
-    <View style={tw`flex-1 items-center justify-center bg-gray-100`}>
-      <Button title="Select Image" onPress={selectImage} />
-      {Platform.OS !== 'web' && <Button title="Take Photo" onPress={takePhoto} />}
-      {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, marginTop: 20 }} />}
-      <Button title="Upload Image" onPress={uploadImage} />
-      <Text style={{ fontFamily: 'MaterialSymbolsRounded', fontSize: 24, color: 'red' }}>favorite</Text>
+    <View style={tw`flex-1 items-center justify-center bg-gray-100 gap-6 mx-4`}>
+      <Text style={tw`text-3xl text-slate-700 text-center font-bold`}>
+        Identify birds instantly with a single click
+      </Text>
+      <Text style={tw`text-xl text-slate-700 text-center font-base`}>
+        Capture or upload a photo to discover the species and build your personal birding journal!
+      </Text>
+      
+      <Image
+        source={imageUri ? { uri: imageUri } : defaultImage}
+        style={[
+          tw`w-48 h-48 rounded-lg`,
+          !imageUri && tw`border-dashed border-2 border-slate-400`
+        ]}        
+      />
+
+      {imageUri && 
+        <Pressable onPress={uploadImage} style={tw`bg-sky-400 p-2 px-8 rounded-full`}>
+          <Text style={tw`text-white text-center font-semibold`}>Identify</Text>
+        </Pressable>
+      }
+
+      <View style={tw`flex flex-row gap-4`}>
+        <Pressable onPress={selectImage} style={tw`border-2 border-sky-400 p-2 px-4 rounded-full`}>
+          <Text style={tw`text-sky-400 text-center font-semibold`}>Upload Image</Text>
+        </Pressable>
+
+        {Platform.OS !== 'web' && (
+          <Pressable onPress={takePhoto} style={tw`border-2 border-sky-400 p-2 px-4 rounded-full`}>
+            <Text style={tw`text-sky-400 text-center font-semibold`}>Take Photo</Text>
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 };
