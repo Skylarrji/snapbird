@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
+import tw from 'twrnc';
+
 
 type PopupProps = {
   onClose: () => void;
@@ -12,20 +14,55 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
 
     return (
     <View style={styles.popupContainer}>
-        <View style={styles.popup}>
-        <Pressable onPress={onClose}>
-            <Text
-                    style={{
-                    marginRight: 15,
-                    fontFamily: 'MaterialSymbolsRounded',
-                    fontSize: 28,
-                    color: Colors[colorScheme ?? 'light'].text,
-                    }}
-                >
-                    close
-            </Text>        
-        </Pressable>
-        <Text>This is the popup content!</Text>
+        <View style={tw`w-1/2 p-4 bg-white rounded-lg`}>
+        
+        <View style={tw`flex w-full justify-end`}>
+            <Pressable onPress={onClose}>
+                <Text
+                        style={{
+                        fontFamily: 'MaterialSymbolsRounded',
+                        fontSize: 24,
+                        color: Colors[colorScheme ?? 'light'].text,
+                        marginLeft: 'auto'
+                        }}
+                    >
+                        close
+                </Text>        
+            </Pressable>
+        </View>
+
+        <View style={tw`flex flex-col items-center justify-center gap-5`}>
+            <Text style={tw`text-2xl text-slate-700 text-center font-bold`}>Tips for bird identification</Text>
+            
+            <View style={tw`flex flex-row items-center justify-center gap-2`}>
+                <View style={tw`flex flex-col items-center justify-center gap-8`}>
+                    <Text
+                        style={{
+                        fontFamily: 'MaterialSymbolsRounded',
+                        fontSize: 50,
+                        color: Colors[colorScheme ?? 'light'].text,
+                        }}
+                    >
+                            Raven
+                    </Text> 
+
+                    <Text
+                        style={{
+                        fontFamily: 'MaterialSymbolsRounded',
+                        fontSize: 20,
+                        color: Colors[colorScheme ?? 'light'].text,
+                        }}
+                    >
+                        Raven
+                    </Text> 
+                </View>
+
+                <View style={tw`flex flex-col items-center justify-center gap-10 w-1/2`}>
+                    <Text style={tw`text-lg text-slate-700 text-center font-base`}>Centered, focused and in frame</Text>
+                    <Text style={tw`text-lg text-slate-700 text-center font-base`}>Too small</Text>
+                </View>
+            </View>
+        </View>
         </View>
     </View>
     );
@@ -41,13 +78,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  popup: {
-    width: 300,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    alignItems: 'center',
   },
   closeButton: {
     marginTop: 10,

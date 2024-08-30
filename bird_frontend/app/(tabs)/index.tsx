@@ -28,7 +28,7 @@ const ImageUpload = () => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      base64: true, 
+      base64: true,
     });
 
     if (!result.canceled) {
@@ -68,7 +68,7 @@ const ImageUpload = () => {
         const response = await fetch(imageUri);
         const blob = await response.blob();
         const reader = new FileReader();
-        
+
         reader.onloadend = async () => {
           base64 = reader.result?.toString().split(',')[1] || '';
 
@@ -122,16 +122,16 @@ const ImageUpload = () => {
       <Text style={tw`text-xl text-slate-700 text-center font-base`}>
         Capture or upload a photo to discover the species and build your personal birding journal!
       </Text>
-      
+
       <Image
         source={imageUri ? { uri: imageUri } : defaultImage}
         style={[
           tw`w-48 h-48 rounded-lg`,
           !imageUri && tw`border-dashed border-2 border-slate-400`
-        ]}        
+        ]}
       />
 
-      {imageUri && 
+      {imageUri &&
         <Pressable onPress={uploadImage} style={tw`bg-sky-400 p-2 px-8 rounded-full`}>
           <Text style={tw`text-white text-center font-semibold`}>Identify</Text>
         </Pressable>
