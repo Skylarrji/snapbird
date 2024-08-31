@@ -9,7 +9,7 @@ type PopupProps = {
 const Popup: React.FC<PopupProps> = ({ onClose }) => {
     return (
         <View style={tw`absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)]`}>
-            <View style={tw`w-3/4 max-w-[300px] p-4 bg-white rounded-xl`}>
+            <View style={tw`w-3/4 max-w-[300px] p-4 pb-6 bg-white rounded-xl`}>
                 <View style={tw`w-full flex justify-end`}>
                     <Pressable onPress={onClose}>
                         <Text
@@ -30,7 +30,7 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
 
                     <View style={tw`flex flex-row w-3/4 items-center justify-center gap-2`}>
                         <View style={tw`flex flex-col w-1/3 items-center justify-center gap-2`}>
-                            <View style={tw`h-[90px] flex items-center justify-center`}>
+                            <View style={tw`h-[75px] flex items-center justify-center relative`}>
                                 <Text
                                     style={{
                                         fontFamily: 'MaterialSymbolsRounded',
@@ -41,9 +41,22 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
                                 >
                                     Raven
                                 </Text>
+
+                                <View style={tw`rounded-full bg-lime-500 absolute w-[28px] h-[28px] flex items-center bottom-2 right-0 justify-center`}>
+                                    <Text
+                                        style={{
+                                            fontFamily: 'MaterialSymbolsRounded',
+                                            fontSize: 25,
+                                            color: '#fff',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Check
+                                    </Text>
+                                </View>
                             </View>
 
-                            <View style={tw`h-[90px] flex items-center justify-center`}>
+                            <View style={tw`h-[75px] flex items-center justify-center`}>
                                 <Text
                                     style={{
                                         fontFamily: 'MaterialSymbolsRounded',
@@ -54,9 +67,22 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
                                 >
                                     Raven
                                 </Text>
+
+                                <View style={tw`rounded-full bg-red-500 absolute w-[28px] h-[28px] flex items-center bottom-4 left-2 justify-center`}>
+                                    <Text
+                                        style={{
+                                            fontFamily: 'MaterialSymbolsRounded',
+                                            fontSize: 25,
+                                            color: '#fff',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        close
+                                    </Text>
+                                </View>
                             </View>
 
-                            <View style={tw`h-[90px] flex items-center justify-center`}>
+                            <View style={tw`h-[75px] flex items-center justify-center`}>
                                 <Text
                                     style={{
                                         fontFamily: 'MaterialSymbolsRounded',
@@ -68,10 +94,23 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
                                 >
                                     Raven
                                 </Text>
+
+                                <View style={tw`rounded-full bg-red-500 absolute w-[28px] h-[28px] flex items-center bottom-2 right-0 justify-center`}>
+                                    <Text
+                                        style={{
+                                            fontFamily: 'MaterialSymbolsRounded',
+                                            fontSize: 25,
+                                            color: '#fff',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        close
+                                    </Text>
+                                </View>
                             </View>
 
-                            <View style={tw`h-[90px] flex items-center justify-center relative`}>
-                                {/* top bird */}
+                            <View style={tw`h-[75px] flex items-center justify-center relative`}>
+                                {/* bottom bird */}
                                 <Text
                                     style={{
                                         fontFamily: 'MaterialSymbolsRounded',
@@ -80,7 +119,7 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
                                         textAlign: 'center',
                                         position: 'absolute',
                                         left: -20,
-                                        top: 50,
+                                        top: 45,
                                     }}
                                 >
                                     Raven
@@ -101,7 +140,7 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
                                     Raven
                                 </Text>
 
-                                {/* bottom bird */}
+                                {/* top bird */}
                                 <Text
                                     style={{
                                         fontFamily: 'MaterialSymbolsRounded',
@@ -115,24 +154,37 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
                                 >
                                     Raven
                                 </Text>
+
+                                <View style={tw`rounded-full bg-red-500 absolute w-[28px] h-[28px] flex items-center bottom-0 left-0 justify-center`}>
+                                    <Text
+                                        style={{
+                                            fontFamily: 'MaterialSymbolsRounded',
+                                            fontSize: 25,
+                                            color: '#fff',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        close
+                                    </Text>
+                                </View>
                             </View>
                         </View>
 
                         <View style={tw`flex flex-col w-2/3 items-center justify-center gap-2`}>
-                            <View style={tw`flex h-[90px] items-center justify-center`}>
-                                <Text style={tw`text-lg flex text-slate-700 text-center font-base`}>Centered, focused and in frame</Text>
+                            <View style={tw`flex h-[75px] items-center justify-center`}>
+                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Centered, focused and in frame</Text>
                             </View>
 
-                            <View style={tw`flex h-[90px] items-center justify-center`}>
-                                <Text style={tw`text-lg flex text-slate-700 text-center font-base`}>Too small</Text>
+                            <View style={tw`flex h-[75px] items-center justify-center`}>
+                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Too small</Text>
                             </View>
 
-                            <View style={tw`flex h-[90px] items-center justify-center`}>
-                                <Text style={tw`text-lg flex text-slate-700 text-center font-base`}>Too blurry</Text>
+                            <View style={tw`flex h-[75px] items-center justify-center`}>
+                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Too blurry</Text>
                             </View>
 
-                            <View style={tw`flex h-[90px] items-center justify-center`}>
-                                <Text style={tw`text-lg flex text-slate-700 text-center font-base`}>Multiple birds/species visible</Text>
+                            <View style={tw`flex h-[75px] items-center justify-center`}>
+                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Multiple birds/species visible</Text>
                             </View>
                         </View>
                     </View>
