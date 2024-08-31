@@ -115,11 +115,11 @@ const ImageUpload = () => {
   };
 
   return (
-    <View style={tw`flex-1 items-center justify-center bg-gray-100 gap-6 mx-4`}>
+    <View style={tw`flex-1 items-center justify-center bg-gray-100 gap-6 w-full`}>
       <Text style={tw`text-3xl text-slate-700 text-center font-bold`}>
         Identify birds instantly with a single click
       </Text>
-      <Text style={tw`text-xl text-slate-700 text-center font-base`}>
+      <Text style={tw`text-xl text-slate-700 text-center font-base mx-4`}>
         Capture or upload a photo to discover the species and build your personal birding journal!
       </Text>
 

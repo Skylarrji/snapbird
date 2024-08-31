@@ -28,7 +28,7 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: '#334155',
           headerShown: useClientOnlyValue(false, true),
           headerTitle: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -37,7 +37,7 @@ export default function TabLayout() {
                 style={{ width: 30, height: 30, marginRight: 10 }}
                 resizeMode="contain"
               />
-              <Text style={tw`text-lg font-semibold`}>SnapBird</Text>
+              <Text style={tw`text-lg font-semibold text-slate-700`}>SnapBird</Text>
             </View>
           ),
         }}
@@ -54,7 +54,7 @@ export default function TabLayout() {
                     marginRight: 15,
                     fontFamily: 'MaterialSymbolsRounded',
                     fontSize: 28,
-                    color: Colors[colorScheme ?? 'light'].text,
+                    color: '#334155',
                   }}
                 >
                   info
