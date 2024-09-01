@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import tw from 'twrnc';
 import { useFonts } from 'expo-font';
+import { useBirds } from '../context/birdContext';
 
 export type Bird = {
   image: string;
@@ -24,7 +25,7 @@ const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>("");
-  const [birds, setBirds] = useState<Bird[]>();
+  const { setBirds } = useBirds();
 
   const [fontsLoaded] = useFonts({
     'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
@@ -69,10 +70,10 @@ const ImageUpload = () => {
       setImageUri(result.assets[0].uri);
     }
   };
-
+  
   const fetchBirds = async () => {
     try {
-      const serverResponse = await fetch('https://4256-65-93-22-248.ngrok-free.app/birds/', {
+      const serverResponse = await fetch(ngrokLink + '/birds/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -80,15 +81,14 @@ const ImageUpload = () => {
         },
       });
       const data = await serverResponse.json();
-      console.log('data: ' + JSON.stringify(data))
+      setBirds(data.birds);
+      setPopupVisible(false);
       
     } catch (error) {
       console.error('Error fetching birds:', error);
       Alert.alert('Failed to fetch birds. Please try again.');
     }
   };
-  
-  
 
   const uploadImage = async () => {
     if (!imageUri) {
@@ -133,7 +133,7 @@ const ImageUpload = () => {
         base64 = await FileSystem.readAsStringAsync(imageUri, {
           encoding: FileSystem.EncodingType.Base64,
         });
-
+  
         const response = await fetch(ngrokLink + '/classify/', {
           method: 'POST',
           headers: {

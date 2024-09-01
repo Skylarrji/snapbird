@@ -1,79 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { StyleSheet, Image, ScrollView, View } from 'react-native';
+import { Text } from '@/components/Themed';
 import tw from 'twrnc';
+import { useBirds } from '../context/birdContext';
 
 export type Bird = {
   image: string;
   species: string;
 };
 
-type ProfileProps = {
-  birds: Bird[];
-};
+const ngrokLink = 'https://4256-65-93-22-248.ngrok-free.app';
 
-export default function Profile({ birds }: ProfileProps) {
-  const [loading, setLoading] = useState<boolean>(true);
+export default function Profile() {
+  const { birds, setBirds } = useBirds();
 
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+  const fetchBirds = async () => {
+    try {
+      const serverResponse = await fetch(ngrokLink + '/birds/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'any',
+        },
+      });
+      const data = await serverResponse.json();
+      setBirds(data.birds);
+      
+    } catch (error) {
+      console.error('Error fetching birds:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBirds();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Birds Information</Text>
-      <FlatList
-        data={birds}
-        keyExtractor={(item) => item.species}
-        renderItem={({ item }) => (
-          <View style={styles.birdContainer}>
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <Text style={styles.species}>{item.species}</Text>
+    <View style={tw`flex-1 items-center justify-center bg-gray-100`}>
+      <Text style={tw`text-3xl text-slate-700 text-center font-bold mb-4 mt-4`}>
+        Your collection
+      </Text>
+      <ScrollView contentContainerStyle={tw`flex-wrap flex-row justify-center gap-4`}>
+        {birds.map((bird, index) => (
+          <View key={`${bird.species}-${index}`} style={tw`flex flex-col items-center justify-center w-36 mb-4`}>
+            <Image
+              source={{ uri: bird.image }}
+              style={tw`w-36 h-36 rounded-t-lg`}
+            />
+            <View style={tw`rounded-b-lg border-2 border-slate-200 bg-white p-2 w-full`}>
+              <Text style={tw`text-base text-slate-700 text-center font-medium`}>{bird.species}</Text>
+            </View>
           </View>
-        )}
-      />
+        ))}
+      </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-  birdContainer: {
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  species: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black'
-  },
-  error: {
-    color: 'red',
-  },
-});
