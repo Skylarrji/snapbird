@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from classifier.views import classify_bird
+from classifier.views import get_all_birds 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('classify/', classify_bird, name='classify_bird'),
+    path('birds/', get_all_birds, name='get_all_birds'),
 ]

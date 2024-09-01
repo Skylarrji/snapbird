@@ -54,6 +54,11 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True # newly added
 ROOT_URLCONF = 'bird_classification.urls'
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'ngrok-skip-browser-warning',
+]
+
 
 TEMPLATES = [
     {
@@ -79,8 +84,12 @@ WSGI_APPLICATION = 'bird_classification.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'bird_classification_db', 
+        'CLIENT': {
+            'host': 'localhost',
+            'port': 27017,
+        }
     }
 }
 
