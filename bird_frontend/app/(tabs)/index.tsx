@@ -5,16 +5,26 @@ import * as FileSystem from 'expo-file-system';
 import tw from 'twrnc';
 import { useFonts } from 'expo-font';
 
+export type Bird = {
+  image: string;
+  species: string;
+};
+
+export type BirdsResponse = {
+  birds: Bird[];
+};
+
 // @ts-expect-error
 import defaultImage from '../../assets/images/bird_graphic.png';
 
 // replace with url generated when running ngrok; used to make backend requests
-const ngrokLink = 'https://2f0b-65-93-22-248.ngrok-free.app';
+const ngrokLink = 'https://4256-65-93-22-248.ngrok-free.app';
 
 const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<string>("");
+  const [birds, setBirds] = useState<Bird[]>();
 
   const [fontsLoaded] = useFonts({
     'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
@@ -60,6 +70,26 @@ const ImageUpload = () => {
     }
   };
 
+  const fetchBirds = async () => {
+    try {
+      const serverResponse = await fetch('https://4256-65-93-22-248.ngrok-free.app/birds/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'any',
+        },
+      });
+      const data = await serverResponse.json();
+      console.log('data: ' + JSON.stringify(data))
+      
+    } catch (error) {
+      console.error('Error fetching birds:', error);
+      Alert.alert('Failed to fetch birds. Please try again.');
+    }
+  };
+  
+  
+
   const uploadImage = async () => {
     if (!imageUri) {
       Alert.alert('No image selected');
@@ -83,13 +113,13 @@ const ImageUpload = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              image_uri: base64,
+              base64_uri: base64,
+              image_uri: imageUri
             }),
           });
 
           const data = await serverResponse.json();
-          const formattedSpecies = data.species.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase());
-          setPopupMessage(`${formattedSpecies}`);
+          setPopupMessage(`${data.species}`);
           setPopupVisible(true);
         };
         reader.readAsDataURL(blob);
@@ -110,13 +140,12 @@ const ImageUpload = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            image_uri: base64,
+            base64_uri: base64,
+            image_uri: imageUri
           }),
         });
         const data = await response.json();
-        // use a regex to find the first letter of every word and capitalize it
-        const formattedSpecies = data.species.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase());
-        setPopupMessage(`${formattedSpecies}`);
+        setPopupMessage(`${data.species}`);
         setPopupVisible(true);
       }
     } catch (error) {
@@ -165,13 +194,13 @@ const ImageUpload = () => {
         )}
       </View>
 
-      {popupVisible && <Popup onCancel={closePopup} message={popupMessage} birdImage={imageUri} />}
+      {popupVisible && <Popup onCancel={closePopup} onSave={fetchBirds} message={popupMessage} birdImage={imageUri} />}
     </View>
   );
 };
 
 // Popup component
-const Popup: React.FC<{ onCancel: () => void; message: string; birdImage: string | undefined }> = ({ onCancel, message, birdImage }) => {
+const Popup: React.FC<{ onCancel: () => void; onSave: () => void; message: string; birdImage: string | undefined }> = ({ onCancel, onSave, message, birdImage }) => {
   return (
     <View style={tw`absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)]`}>
       <View style={tw`w-3/4 max-w-[300px] p-4 pb-6 bg-white rounded-xl`}>
@@ -197,7 +226,7 @@ const Popup: React.FC<{ onCancel: () => void; message: string; birdImage: string
             <Pressable onPress={onCancel} style={tw`border-2 border-sky-400 p-2 px-4 rounded-full`}>
               <Text style={tw`text-sky-400 text-center font-semibold`}>Cancel</Text>
             </Pressable>
-            <Pressable onPress={() => { }} style={tw`bg-sky-400 p-2 px-6 flex items-center justify-center rounded-full`}>
+            <Pressable onPress={onSave} style={tw`bg-sky-400 p-2 px-6 flex items-center justify-center rounded-full`}>
               <Text style={tw`text-white text-center font-semibold`}>Save</Text>
             </Pressable>
           </View>

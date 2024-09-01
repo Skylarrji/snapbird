@@ -46,7 +46,6 @@ export default function TabLayout() {
                 fontFamily: 'MaterialSymbolsRounded',
                 fontSize: 28,
                 color: color,
-                marginBottom: -3
               }}
             >
               home
@@ -76,7 +75,6 @@ export default function TabLayout() {
                 fontFamily: 'MaterialSymbolsRounded',
                 fontSize: 28,
                 color: color,
-                marginBottom: -3
               }}
             >
               person
