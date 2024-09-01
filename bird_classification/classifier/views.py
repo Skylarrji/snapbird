@@ -34,7 +34,7 @@ def classify_bird(request):
 
             # Insert into MongoDB
             result = collection.insert_one({
-                'image': image_uri,
+                'image': image_base64,
                 'species': species
             })
 
@@ -47,10 +47,8 @@ def classify_bird(request):
 
 
 def get_all_birds(request):
-    print("recieved")
     if request.method == 'GET':
         try:
-            # Query the database for all birds
             birds = list(collection.find({}, {'_id': 0}))  # Exclude the '_id' field from the result
             return JsonResponse({'birds': birds}, safe=False)
 
