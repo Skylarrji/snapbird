@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
 import { Tabs } from 'expo-router';
 import { View, Text, Pressable, Image } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import Popup from '../popup'
 import tw from 'twrnc';
 
-function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const [fontsLoaded] = useFonts({
     'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
   });
@@ -28,10 +20,11 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#334155',
+          tabBarActiveTintColor: '#38BDF8',
           headerShown: useClientOnlyValue(false, true),
-          headerTitle: () => (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          tabBarStyle: {paddingBottom: 5},
+          headerLeft: () => (
+            <View style={tw`flex flex-row items-center ml-4`}>
               <Image
                 source={require('@/assets/images/bird_logo.png')}
                 style={{ width: 30, height: 30, marginRight: 10 }}
@@ -40,13 +33,24 @@ export default function TabLayout() {
               <Text style={tw`text-lg font-semibold text-slate-700`}>SnapBird</Text>
             </View>
           ),
+
+          headerTitle: '', // added to prevent extra page indicator title at the top
         }}
       >
         <Tabs.Screen
           name="index"
           options={{
             title: 'Home',
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+            tabBarIcon: ({ color }) => <Text
+              style={{
+                fontFamily: 'MaterialSymbolsRounded',
+                fontSize: 28,
+                color: color,
+                marginBottom: -3
+              }}
+            >
+              home
+            </Text>,
             headerRight: () => (
               <Pressable onPress={() => setPopupVisible(true)}>
                 <Text
@@ -66,8 +70,17 @@ export default function TabLayout() {
         <Tabs.Screen
           name="two"
           options={{
-            title: 'Tab Two',
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+            title: 'Profile',
+            tabBarIcon: ({ color }) => <Text
+              style={{
+                fontFamily: 'MaterialSymbolsRounded',
+                fontSize: 28,
+                color: color,
+                marginBottom: -3
+              }}
+            >
+              person
+            </Text>,
           }}
         />
       </Tabs>

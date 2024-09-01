@@ -9,7 +9,7 @@ import { useFonts } from 'expo-font';
 import defaultImage from '../../assets/images/bird_graphic.png';
 
 // replace with url generated when running ngrok; used to make backend requests
-const ngrokLink = 'https://ba45-65-93-22-248.ngrok-free.app';
+const ngrokLink = 'https://2f0b-65-93-22-248.ngrok-free.app';
 
 const ImageUpload = () => {
   const [imageUri, setImageUri] = useState<string | undefined>("");
