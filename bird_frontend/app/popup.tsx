@@ -172,19 +172,19 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
 
                         <View style={tw`flex flex-col w-2/3 items-center justify-center gap-2`}>
                             <View style={tw`flex h-[75px] items-center justify-center`}>
-                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Centered, focused and in frame</Text>
+                                <Text style={tw`text-base flex text-slate-700 text-center`}>Centered, focused and in frame</Text>
                             </View>
 
                             <View style={tw`flex h-[75px] items-center justify-center`}>
-                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Too small</Text>
+                                <Text style={tw`text-base flex text-slate-700 text-center`}>Too small</Text>
                             </View>
 
                             <View style={tw`flex h-[75px] items-center justify-center`}>
-                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Too blurry</Text>
+                                <Text style={tw`text-base flex text-slate-700 text-center`}>Too blurry</Text>
                             </View>
 
                             <View style={tw`flex h-[75px] items-center justify-center`}>
-                                <Text style={tw`text-base flex text-slate-700 text-center font-base`}>Multiple birds/species visible</Text>
+                                <Text style={tw`text-base flex text-slate-700 text-center`}>Multiple birds/species visible</Text>
                             </View>
                         </View>
                     </View>
