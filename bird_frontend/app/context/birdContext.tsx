@@ -10,6 +10,7 @@ interface BirdContextProps {
   setBirds: React.Dispatch<React.SetStateAction<Bird[]>>;
 }
 
+// context for keeping track of the birds in the database in the frontend between tabs
 const BirdContext = createContext<BirdContextProps | undefined>(undefined);
 
 export const BirdProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

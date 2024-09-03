@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # newly added
 ]
 
+# added to bypass CORS errors when making backend requests using ngrok
 CORS_ALLOW_ALL_ORIGINS = True # newly added
 ROOT_URLCONF = 'bird_classification.urls'
 CORS_ALLOW_HEADERS = [
@@ -79,7 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'bird_classification.wsgi.application'
 
 
-# Database
+# Database (information for mongodb database)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {

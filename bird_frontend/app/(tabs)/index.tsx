@@ -6,31 +6,24 @@ import tw from 'twrnc';
 import { useFonts } from 'expo-font';
 import { useBirds } from '../context/birdContext';
 
-export type Bird = {
-  image: string;
-  species: string;
-};
-
-export type BirdsResponse = {
-  birds: Bird[];
-};
-
 // @ts-expect-error
 import defaultImage from '../../assets/images/bird_graphic.png';
 
 // replace with url generated when running ngrok; used to make backend requests
-const ngrokLink = 'https://4256-65-93-22-248.ngrok-free.app';
+const ngrokLink = 'https://5767-65-93-22-248.ngrok-free.app';
 
-const ImageUpload = () => {
-  const [imageUri, setImageUri] = useState<string | undefined>("");
-  const [popupVisible, setPopupVisible] = useState<boolean>(false);
-  const [popupMessage, setPopupMessage] = useState<string>("");
-  const { setBirds } = useBirds();
+// home page component
+const Home = () => {
+  const [imageUri, setImageUri] = useState<string | undefined>(""); // the uri of the current image uploaded/picture taken
+  const [popupVisible, setPopupVisible] = useState<boolean>(false); // true when the "bird identified" popup is visible, else false
+  const [popupMessage, setPopupMessage] = useState<string>(""); // stores the species that is identified on the popup
+  const { setBirds } = useBirds(); // context that holds the birds in the database
 
   const [fontsLoaded] = useFonts({
     'MaterialSymbolsRounded': require('../../assets/fonts/MaterialSymbolsRounded.ttf'),
   });
 
+  // function that runs when an image is being selected from the camera roll/file system
   const selectImage = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -52,6 +45,7 @@ const ImageUpload = () => {
     }
   };
 
+  // function that runs when the user takes a photo on their mobile device
   const takePhoto = async () => {
     let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
@@ -70,27 +64,29 @@ const ImageUpload = () => {
       setImageUri(result.assets[0].uri);
     }
   };
-  
+
+  // retrieves the birds from the database and updates the context that is being passed down with them
   const fetchBirds = async () => {
     try {
-      const serverResponse = await fetch(ngrokLink + '/birds/', {
+      const serverResponse = await fetch(ngrokLink + '/birds/', { // send a GET request to the backend
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'any',
+          'ngrok-skip-browser-warning': 'any', // needed to prevent cors error
         },
       });
       const data = await serverResponse.json();
       setBirds(data.birds);
       setPopupVisible(false);
-      
+
     } catch (error) {
       console.error('Error fetching birds:', error);
       Alert.alert('Failed to fetch birds. Please try again.');
     }
   };
 
-  const uploadImage = async () => {
+  // function that runs when the "identify" button is pressed
+  const identifyBird = async () => {
     if (!imageUri) {
       Alert.alert('No image selected');
       return;
@@ -99,15 +95,15 @@ const ImageUpload = () => {
     try {
       let base64: string;
 
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'web') { // the request is made on a web browser
         const response = await fetch(imageUri);
         const blob = await response.blob();
         const reader = new FileReader();
 
         reader.onloadend = async () => {
-          base64 = reader.result?.toString().split(',')[1] || '';
+          base64 = reader.result?.toString().split(',')[1] || ''; // convert image to base64
 
-          const serverResponse = await fetch(ngrokLink + '/classify/', {
+          const serverResponse = await fetch(ngrokLink + '/classify/', { // send a POST request to the backend
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -119,11 +115,11 @@ const ImageUpload = () => {
           });
 
           const data = await serverResponse.json();
-          setPopupMessage(`${data.species}`);
+          setPopupMessage(`${data.species}`); // set the "bird identified" popup to the species identified
           setPopupVisible(true);
         };
         reader.readAsDataURL(blob);
-      } else {
+      } else { // the request is made on mobile
         const fileInfo = await FileSystem.getInfoAsync(imageUri);
         if (!fileInfo.exists) {
           Alert.alert('File not found!');
@@ -133,8 +129,8 @@ const ImageUpload = () => {
         base64 = await FileSystem.readAsStringAsync(imageUri, {
           encoding: FileSystem.EncodingType.Base64,
         });
-  
-        const response = await fetch(ngrokLink + '/classify/', {
+
+        const response = await fetch(ngrokLink + '/classify/', {  // send a POST request to the backend
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -145,7 +141,7 @@ const ImageUpload = () => {
           }),
         });
         const data = await response.json();
-        setPopupMessage(`${data.species}`);
+        setPopupMessage(`${data.species}`); // set the "bird identified" popup to the species identified
         setPopupVisible(true);
       }
     } catch (error) {
@@ -177,7 +173,7 @@ const ImageUpload = () => {
       />
 
       {imageUri &&
-        <Pressable onPress={uploadImage} style={tw`bg-sky-400 p-2 px-8 rounded-full`}>
+        <Pressable onPress={identifyBird} style={tw`bg-sky-400 p-2 px-8 rounded-full`}>
           <Text style={tw`text-white text-center font-semibold`}>Identify</Text>
         </Pressable>
       }
@@ -199,7 +195,7 @@ const ImageUpload = () => {
   );
 };
 
-// Popup component
+// popup component that appears with the bird species identified
 const Popup: React.FC<{ onCancel: () => void; onSave: () => void; message: string; birdImage: string | undefined }> = ({ onCancel, onSave, message, birdImage }) => {
   return (
     <View style={tw`absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)]`}>
@@ -237,4 +233,4 @@ const Popup: React.FC<{ onCancel: () => void; onSave: () => void; message: strin
   );
 };
 
-export default ImageUpload;
+export default Home;

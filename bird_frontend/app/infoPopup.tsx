@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import tw from 'twrnc';
 
-type PopupProps = {
+type InfoPopupProps = {
     onClose: () => void;
 };
 
-const Popup: React.FC<PopupProps> = ({ onClose }) => {
+// info popup component that gives tips on taking photos of birds
+const InfoPopup: React.FC<InfoPopupProps> = ({ onClose }) => {
     return (
         <View style={tw`absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.5)]`}>
             <View style={tw`w-3/4 max-w-[300px] p-4 pb-6 bg-white rounded-xl`}>
@@ -194,4 +195,4 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
     );
 };
 
-export default Popup;
+export default InfoPopup;

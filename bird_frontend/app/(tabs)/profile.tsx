@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, ScrollView, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, ScrollView, View } from 'react-native';
 import { Text } from '@/components/Themed';
 import tw from 'twrnc';
 import { useBirds } from '../context/birdContext';
 
-export type Bird = {
-  image: string;
-  species: string;
-};
+const ngrokLink = 'https://5767-65-93-22-248.ngrok-free.app';
 
-const ngrokLink = 'https://4256-65-93-22-248.ngrok-free.app';
-
+// Profile page
 export default function Profile() {
   const { birds, setBirds } = useBirds();
 
-  const fetchBirds = async () => {
+  const fetchBirds = async () => { // fetches all the birds from the database using a GET request
     try {
       const serverResponse = await fetch(ngrokLink + '/birds/', {
         method: 'GET',
@@ -24,14 +20,14 @@ export default function Profile() {
         },
       });
       const data = await serverResponse.json();
-      setBirds(data.birds);
+      setBirds(data.birds); // update the context
       
     } catch (error) {
       console.error('Error fetching birds:', error);
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { // fetch all the birds on first render
     fetchBirds();
   }, []);
 

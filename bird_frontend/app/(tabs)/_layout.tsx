@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 import { View, Text, Pressable, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import Popup from '../popup'
+import InfoPopup from '../infoPopup'
 import tw from 'twrnc';
 import { BirdProvider } from '../context/birdContext';
 
@@ -20,7 +20,7 @@ export default function TabLayout() {
   return (
     <>
       <BirdProvider>
-        <Tabs
+        <Tabs // topmost header
           screenOptions={{
             tabBarActiveTintColor: '#38BDF8',
             headerShown: useClientOnlyValue(false, true),
@@ -39,7 +39,7 @@ export default function TabLayout() {
             headerTitle: '', // added to prevent extra page indicator title at the top
           }}
         >
-          <Tabs.Screen
+          <Tabs.Screen // bottom page home tab
             name="index"
             options={{
               title: 'Home',
@@ -52,7 +52,7 @@ export default function TabLayout() {
               >
                 home
               </Text>,
-              headerRight: () => (
+              headerRight: () => ( // when on the home page, set the right hand side of the top header to the info button
                 <Pressable onPress={() => setPopupVisible(true)}>
                   <Text
                     style={{
@@ -68,8 +68,8 @@ export default function TabLayout() {
               ),
             }}
           />
-          <Tabs.Screen
-            name="two"
+          <Tabs.Screen // bottom page profile tab
+            name="profile"
             options={{
               title: 'Profile',
               tabBarIcon: ({ color }) => <Text
@@ -85,8 +85,8 @@ export default function TabLayout() {
           />
         </Tabs>
 
-        {isPopupVisible && (
-          <Popup onClose={() => setPopupVisible(false)} />
+        {isPopupVisible && ( // info popup
+          <InfoPopup onClose={() => setPopupVisible(false)} />
         )}
       </BirdProvider>
     </>
