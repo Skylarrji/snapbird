@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)1om_g*oid+i1#f&g)ub$7oe@)fk$y%1w9=)j)&$sggm@00zod
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 # Application definition
 
