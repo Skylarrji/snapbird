@@ -10,11 +10,12 @@ import { useBirds } from '../context/birdContext';
 import defaultImage from '../../assets/images/bird_graphic.png';
 
 // replace with url generated when running ngrok; used to make backend requests
-const ngrokLink = 'https://5767-65-93-22-248.ngrok-free.app';
+const ngrokLink = 'https://7d1c-65-93-22-248.ngrok-free.app';
 
 // home page component
 const Home = () => {
   const [imageUri, setImageUri] = useState<string | undefined>(""); // the uri of the current image uploaded/picture taken
+  const [base64Uri, setBase64Uri] = useState<string | undefined>(""); // the base64 uri of the current image uploaded/picture taken
   const [popupVisible, setPopupVisible] = useState<boolean>(false); // true when the "bird identified" popup is visible, else false
   const [popupMessage, setPopupMessage] = useState<string>(""); // stores the species that is identified on the popup
   const { setBirds } = useBirds(); // context that holds the birds in the database
@@ -66,17 +67,32 @@ const Home = () => {
   };
 
   // retrieves the birds from the database and updates the context that is being passed down with them
-  const fetchBirds = async () => {
+  const saveAndFetchBirds = async () => {
     try {
-      const serverResponse = await fetch(ngrokLink + '/birds/', { // send a GET request to the backend
+
+      const postServerResponse = await fetch(ngrokLink + '/classify/', { // send a POST request to the backend and add it to the database
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          base64_uri: base64Uri,
+          image_uri: imageUri,
+          submit_bird: true
+        }),
+      });
+
+      const getServerResponse = await fetch(ngrokLink + '/birds/', { // send a GET request to the backend
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'any', // needed to prevent cors error
         },
       });
-      const data = await serverResponse.json();
+      const data = await getServerResponse.json();
       setBirds(data.birds);
+      setImageUri("");
+      setBase64Uri("");
       setPopupVisible(false);
 
     } catch (error) {
@@ -102,6 +118,7 @@ const Home = () => {
 
         reader.onloadend = async () => {
           base64 = reader.result?.toString().split(',')[1] || ''; // convert image to base64
+          setBase64Uri(base64)
 
           const serverResponse = await fetch(ngrokLink + '/classify/', { // send a POST request to the backend
             method: 'POST',
@@ -110,7 +127,8 @@ const Home = () => {
             },
             body: JSON.stringify({
               base64_uri: base64,
-              image_uri: imageUri
+              image_uri: imageUri,
+              submit_bird: false
             }),
           });
 
@@ -129,6 +147,7 @@ const Home = () => {
         base64 = await FileSystem.readAsStringAsync(imageUri, {
           encoding: FileSystem.EncodingType.Base64,
         });
+        setBase64Uri(base64)
 
         const response = await fetch(ngrokLink + '/classify/', {  // send a POST request to the backend
           method: 'POST',
@@ -137,7 +156,8 @@ const Home = () => {
           },
           body: JSON.stringify({
             base64_uri: base64,
-            image_uri: imageUri
+            image_uri: imageUri,
+            submit_bird: false
           }),
         });
         const data = await response.json();
@@ -190,7 +210,7 @@ const Home = () => {
         )}
       </View>
 
-      {popupVisible && <Popup onCancel={closePopup} onSave={fetchBirds} message={popupMessage} birdImage={imageUri} />}
+      {popupVisible && <Popup onCancel={closePopup} onSave={saveAndFetchBirds} message={popupMessage} birdImage={imageUri} />}
     </View>
   );
 };

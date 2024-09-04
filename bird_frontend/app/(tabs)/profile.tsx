@@ -4,7 +4,7 @@ import { Text } from '@/components/Themed';
 import tw from 'twrnc';
 import { useBirds } from '../context/birdContext';
 
-const ngrokLink = 'https://5767-65-93-22-248.ngrok-free.app';
+const ngrokLink = 'https://7d1c-65-93-22-248.ngrok-free.app';
 
 // Profile page
 export default function Profile() {

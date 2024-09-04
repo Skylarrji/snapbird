@@ -14,13 +14,14 @@ collection = db['birds']
 
 
 # POST /classify takes in an image_uri in base64 format in the request body and returns a json object with the species
-#   identified in addition to adding it to the database
+#   identified in addition to adding it to the database if the value passed into submit_bird is true
 @csrf_exempt
 def classify_bird(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         image_base64 = data.get('base64_uri')
         image_uri = data.get('image_uri')
+        submit_bird = data.get('submit_bird')
 
         if not image_base64:
             return JsonResponse({'error': 'No image URI provided'}, status=400)
@@ -35,13 +36,14 @@ def classify_bird(request):
             # predict the bird species and convert it into title case
             species = predict_bird_species(image_path).title()
 
-            # insert into MongoDB
-            result = collection.insert_one({
-                'image': image_uri,
-                'species': species
-            })
+            if submit_bird:
+                # insert into MongoDB
+                result = collection.insert_one({
+                    'image': image_uri,
+                    'species': species
+                })
 
-            return JsonResponse({'species': species, 'inserted_id': str(result.inserted_id)})
+            return JsonResponse({'species': species})
             
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)

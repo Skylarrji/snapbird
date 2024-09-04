@@ -21,6 +21,6 @@ from classifier.views import get_all_birds
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('classify/', classify_bird, name='classify_bird'), # post request
+    path('classify/', classify_bird, name='classify_bird'), # post/get request
     path('birds/', get_all_birds, name='get_all_birds'), # get request
 ]
