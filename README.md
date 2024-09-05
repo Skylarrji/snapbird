@@ -17,7 +17,7 @@ Have you ever spotted a bird and wished you could identify it with just a click?
 - **AI Model:** A ResNet-18 model fine-tuned using Fastai based off of the `Birds 525 Species - Image Classification` dataset. The Kaggle project (a wrapper for Jupyter Notebook) for the fine-tuned model is linked here: https://www.kaggle.com/code/skylarji/bird-species-classifier
 
 # Demo 📱
-A quick demonstration of the app is in the video below, which is a bit choppy due to the additions of graphics showing where on the screen the user has tapped.
+A quick demonstration of the app is in this video, which is a bit choppy due to the additions of graphics showing where on the screen the user has tapped:
 https://youtu.be/g-3ZH1iJDhc
 
 # Installation 📋
