@@ -6,7 +6,7 @@
 Have you ever spotted a bird and wished you could identify it with just a click? SnapBird makes it possible! This app allows users to upload photos of birds, identify them instantly, and explore a gallery of past identifications—all in an intuitive and user-friendly interface.
 
 # Features 🖋️
-- **Bird Image Classification System:** Easily upload photos of birds directly from your device and recieve instant identification of the bird's common name from a powerful AI model. 
+- **Bird Image Classification System:** Easily upload photos of birds directly from your device and receive instant identification of the bird's common name from a powerful AI model
 - **Bird Gallery:** Keep track of all the birds and their corresponding species you've identified in the past, stored in a MongoDB database
 - **Interface:** A clean, responsive, and user-friendly interface designed for seamless interaction on both mobile and desktop platforms. The interface is optimized for quick access to all features, making bird identification fun and effortless
 
@@ -15,6 +15,10 @@ Have you ever spotted a bird and wished you could identify it with just a click?
 - **Backend:** Django
 - **Database:** MongoDB
 - **AI Model:** A ResNet-18 model fine-tuned using Fastai based off of the `Birds 525 Species - Image Classification` dataset. The Kaggle project (a wrapper for Jupyter Notebook) for the fine-tuned model is linked here: https://www.kaggle.com/code/skylarji/bird-species-classifier
+
+# Demo 📱
+A quick demonstration of the app is in the video below, which is a bit choppy due to the additions of graphics showing where on the screen the user has tapped.
+https://youtu.be/g-3ZH1iJDhc
 
 # Installation 📋
 Make sure you have the following installed:
@@ -45,7 +49,7 @@ Enter the following commands:
 ### Terminal #3 (ngrok server)
 Enter the following commands:
 - `ngrok http 8000`
-> This should generate a url similar to "https://5767-65-93-22-248.ngrok-free.app"; replace the URLs assigned to the `ngrokLink` variables in `bird_frontend/app/(tabs)/index.tsx` and `bird_frontend/app/(tabs)/profile.tsx` with the URL generated
+> This should generate a URL similar to "https://5767-65-93-22-248.ngrok-free.app"; replace the URLs assigned to the `ngrokLink` variables in `bird_frontend/app/(tabs)/index.tsx` and `bird_frontend/app/(tabs)/profile.tsx` with the URL generated
 
 ### Terminal #4 (MongoDB)
 Enter the following commands:
