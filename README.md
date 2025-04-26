@@ -20,7 +20,7 @@ The project utilizes **React Native**, **Django**, **MongoDB**, and **Fastai** t
 4. Identified bird species are returned to users, who can optionally **save** the bird's photo and identification to their personal gallery.
 5. Data is stored persistently in **MongoDB**.
 
-## Challenges Faced & Solutions ⚙️
+## Challenges Faced ⚙️
 - **Base64 Encoding Issue:**  
   Mobile device image URIs couldn't be directly sent to the backend.  
   **Solution:** Used the `FileReader` API to convert images into Base64 strings before uploading.
