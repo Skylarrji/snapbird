@@ -1,70 +1,115 @@
 # SnapBird 🐦
 
-> Note: The commits to this repository are made using my school account (sji).
+> **Note:** The commits to this repository are made using my school account (sji).
 
-# Purpose 📝
-Have you ever spotted a bird and wished you could identify it with just a click? SnapBird makes it possible! This app allows users to upload photos of birds, identify them instantly, and explore a gallery of past identifications—all in an intuitive and user-friendly interface.
+## Overview 📝
+SnapBird is a mobile application that allows users to **capture and identify birds** through AI image classification. Users can upload photos, receive instant species identification, and save their discoveries into a personal bird-watching gallery.
 
-# Features 🖋️
-- **Bird Image Classification System:** Easily upload photos of birds directly from your device and receive instant identification of the bird's common name from a powerful AI model
-- **Bird Gallery:** Keep track of all the birds and their corresponding species you've identified in the past, stored in a MongoDB database
-- **Interface:** A clean, responsive, and user-friendly interface designed for seamless interaction on both mobile and desktop platforms. The interface is optimized for quick access to all features, making bird identification fun and effortless
+The project utilizes **React Native**, **Django**, **MongoDB**, and **Fastai** to create a seamless bird tracking experience designed especially for younger audiences.
 
-# Technologies Used 🛠️
+## Motivation 🚀
+- **Skill Expansion:** I wanted to extend my prior experience with React into the mobile space using React Native.
+- **AI:** I also wanted to gain hands-on experience fine-tuning and deploying AI models in a real-world application.
+- **Personal Connection:** Finally, I wanted to build something meaningful for kids like my younger brother, who loves learning about birds but didn't have an easy way to track what he found.
+
+## Technology Stack 🛠️
 - **Frontend:** React Native
 - **Backend:** Django
-- **Database:** MongoDB
-- **AI Model:** A ResNet-18 model fine-tuned using Fastai based off of the `Birds 525 Species - Image Classification` dataset. The Kaggle project (a wrapper for Jupyter Notebook) for the fine-tuned model is linked here: https://www.kaggle.com/code/skylarji/bird-species-classifier
+- **Database:** MongoDB 
+- **AI Model:** Fastai 
 
-# Demo 📱
-A quick demonstration of the app is in this video, which is a bit choppy due to the additions of graphics showing where on the screen the user has tapped:
-https://youtu.be/g-3ZH1iJDhc
+## How It Works 🔍
+1. Fine-tuned a **ResNet-18** model on 90k bird images using Fastai within a [Kaggle (Jupyter Notebook) environment](https://www.kaggle.com/code/skylarji/bird-species-classifier).
+2. Developed a mobile app where users can either **upload or capture** bird images.
+3. Images are converted into **Base64 encoded strings** and sent to a **Django backend** for prediction.
+4. Identified bird species are returned to users, who can optionally **save** the bird's photo and identification to their personal gallery.
+5. Data is stored persistently in **MongoDB**.
 
-# Installation 📋
-Make sure you have the following installed:
+## Challenges Faced & Solutions ⚙️
+- **Base64 Encoding Issue:**  
+  Mobile device image URIs couldn't be directly sent to the backend.  
+  **Solution:** Used the `FileReader` API to convert images into Base64 strings before uploading.
+
+- **Mobile Network Timeout (Expo + Django):**  
+  Mobile devices could not reach localhost during POST requests.  
+  **Solution:** Identified CORS issues and used **ngrok tunnels** to create public API endpoints accessible from mobile.
+
+- **Ngrok Browser Warning:**  
+  Encountered 500 errors from ngrok's browser warning page.  
+  **Solution:** After troubleshooting CORS headers, resolved by setting `ngrok-skip-browser-warning: "any"`.
+
+- **Expo Tunnel Connection Issues:**  
+  Network response timeouts when starting the app via Expo.  
+  **Solution:** Researched and identified it as a firewall issue; used **Expo's tunnel** mode to bypass it.
+
+## Favorite Parts ✨
+- Stepping into **AI development** for the first time and seeing a model correctly identify bird photos.
+- Building a mobile experience that handles **user-uploaded images** smoothly across devices.
+- Watching an idea come to life and seeing it be useful for younger users.
+
+## Future Improvements 🔧
+- **Authentication:** Implement authentication so that bird galleries are personal rather than global.
+- **Model Self-Improvement:** Allow users to **suggest corrections** if a bird is misidentified, helping fine-tune the model further over time.
+
+## Demo 📱
+- Quick video walkthrough:  
+  [YouTube Demo](https://youtu.be/g-3ZH1iJDhc)
+
+## Installation 📋
+
+### Prerequisites
 - Node.js and npm or yarn
 - Python and pip
 - MongoDB
 - ngrok
 
-To run SnapBird locally, first, clone this repository by running the following commands:
-- `git clone https://github.com/Skylarrji/bird-tracker.git`
-- `cd bird-tracker`
+### Setup
 
-Then, open the cloned repository on VSCode and open four terminals:
+Clone the repository:
+```bash
+git clone https://github.com/Skylarrji/bird-tracker.git
+cd bird-tracker
+```
 
-### Terminal #1 (Frontend)
-Enter the following commands:
-- `cd bird_frontend`
-- `yarn` (or `npm i`)
-- `npx expo start -c --tunnel` 
+Run the following in four terminals:
 
-### Terminal #2 (Backend)
-Enter the following commands:
-- `python3 -m venv .venv`
-- `source .venv/bin/activate` 
-- `cd bird_classification` 
-- `python manage.py runserver 0.0.0.0:8000`
+Terminal #1 (Frontend)
+```bash
+cd bird_frontend
+yarn  # or npm install
+npx expo start -c --tunnel
+```
 
-### Terminal #3 (ngrok server)
-Enter the following commands:
-- `ngrok http 8000`
-> This should generate a URL similar to "https://5767-65-93-22-248.ngrok-free.app"; replace the URLs assigned to the `ngrokLink` variables in `bird_frontend/app/(tabs)/index.tsx` and `bird_frontend/app/(tabs)/profile.tsx` with the URL generated
+Terminal #2 (Backend)
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+cd bird_classification
+python manage.py runserver 0.0.0.0:8000
+```
 
-### Terminal #4 (MongoDB)
-Enter the following commands:
-- `sudo service mongod start`
-- `mongo`
-- `use bird_classification_db`
-- `db.createCollection("birds")`
+Terminal #3 (ngrok Tunnel)
+```bash
+ngrok http 8000
+```
 
-# Usage 💻
-## Mobile
-1. Download the Expo Go app on your device
-2. Scan the QR code generated after running the final command in **terminal #1** to launch the app
+Copy the generated ngrok URL and replace the ngrokLink variables inside the following files:
+	•	`bird_frontend/app/(tabs)/index.tsx`
+	•	`bird_frontend/app/(tabs)/profile.tsx`
 
-## Desktop
-1. Open `localhost:8081` to view the application
+ Terminal #4 (MongoDB)
+ ```bash
+sudo service mongod start
+mongo
+use bird_classification_db
+db.createCollection("birds")
+ ```
 
-# Project Status 🚧
-This project is currently in development, so stay tuned for new features!
+## Running the App
+	•	Mobile: Install the Expo Go app and scan the QR code.
+	•	Desktop: Open localhost:8081.
+
+## Project Status 🚧
+Currently in active development!
+Upcoming features include user authentication, correction feedback, and potential model retraining based on user input.
+
