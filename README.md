@@ -7,11 +7,6 @@ SnapBird is a mobile application that allows users to **capture and identify bir
 
 The project utilizes **React Native**, **Django**, **MongoDB**, and **Fastai** to create a seamless bird tracking experience designed especially for younger audiences.
 
-## Motivation 🚀
-- **Skill Expansion:** I wanted to extend my prior experience with React into the mobile space using React Native.
-- **AI:** I also wanted to gain hands-on experience fine-tuning and deploying AI models in a real-world application.
-- **Personal Connection:** Finally, I wanted to build something meaningful for kids like my younger brother, who loves learning about birds but didn't have an easy way to track what he found.
-
 ## Technology Stack 🛠️
 - **Frontend:** React Native
 - **Backend:** Django
