@@ -42,11 +42,6 @@ The project utilizes **React Native**, **Django**, **MongoDB**, and **Fastai** t
   Network response timeouts when starting the app via Expo.  
   **Solution:** Researched and identified it as a firewall issue; used **Expo's tunnel** mode to bypass it.
 
-## Favorite Parts ✨
-- Stepping into **AI development** for the first time and seeing a model correctly identify bird photos.
-- Building a mobile experience that handles **user-uploaded images** smoothly across devices.
-- Watching an idea come to life and seeing it be useful for younger users.
-
 ## Future Improvements 🔧
 - **Authentication:** Implement authentication so that bird galleries are personal rather than global.
 - **Model Self-Improvement:** Allow users to **suggest corrections** if a bird is misidentified, helping fine-tune the model further over time.
