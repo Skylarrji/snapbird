@@ -106,8 +106,8 @@ db.createCollection("birds")
  ```
 
 ## Running the App
-	•	Mobile: Install the Expo Go app and scan the QR code.
-	•	Desktop: Open localhost:8081.
+Mobile: Install the Expo Go app and scan the QR code
+Desktop: Open `localhost:8081`
 
 ## Project Status 🚧
 Currently in active development!
